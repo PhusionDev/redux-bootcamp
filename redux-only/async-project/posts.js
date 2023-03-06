@@ -7,6 +7,16 @@ const POSTS_FETCH_REQUEST = 'POSTS_FETCH_REQUEST';
 const POSTS_FETCH_SUCCESS = 'POSTS_FETCH_SUCCESS';
 const POSTS_FETCH_FAIL = 'POSTS_FETCH_FAIL';
 
+// custom middleware
+const customLogger = () => {
+  return (next) => {
+    return (action) => {
+      console.log('Action fired', action);
+      next(action);
+    };
+  };
+};
+
 // initial state
 const initialState = {
   posts: [],
@@ -52,7 +62,10 @@ const postsReducer = (state = initialState, action) => {
 };
 
 // store
-const store = createStore(postsReducer, applyMiddleware(loggerMiddleware));
+const store = createStore(
+  postsReducer,
+  applyMiddleware(loggerMiddleware, customLogger)
+);
 
 // subscribe
 store.subscribe(() => {
