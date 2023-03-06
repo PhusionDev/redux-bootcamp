@@ -1,5 +1,6 @@
 const axios = require('axios');
-const { createStore, combineReducers } = require('redux');
+const { createStore, applyMiddleware, combineReducers } = require('redux');
+const loggerMiddleware = require('redux-logger').createLogger();
 
 // constants
 const POSTS_FETCH_REQUEST = 'POSTS_FETCH_REQUEST';
@@ -31,11 +32,33 @@ const postsFetchFail = () => {
 };
 
 // reducers
-const postsReducer = (state = initialState, action) => {};
-
-// subscribe
+const postsReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case POSTS_FETCH_REQUEST:
+      return {
+        posts: [...state.posts, 'html'],
+      };
+    case POSTS_FETCH_REQUEST:
+      return {
+        posts: [...state.posts],
+      };
+    case POSTS_FETCH_FAIL:
+      return {
+        posts: [...state.posts],
+      };
+    default:
+      return state;
+  }
+};
 
 // store
-const store = createStore(postsReducer);
+const store = createStore(postsReducer, applyMiddleware(loggerMiddleware));
+
+// subscribe
+store.subscribe(() => {
+  const data = store.getState();
+  console.log(data);
+});
 
 // dispatch
+store.dispatch(postsFetchRequest());
