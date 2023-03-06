@@ -39,10 +39,10 @@ const postsFetchSuccess = (posts) => {
   };
 };
 
-const postsFetchFail = (message) => {
+const postsFetchFail = (err) => {
   return {
     type: POSTS_FETCH_FAIL,
-    payload: message,
+    payload: err,
   };
 };
 
@@ -66,15 +66,20 @@ const postsReducer = (state = initialState, action) => {
   switch (action.type) {
     case POSTS_FETCH_REQUEST:
       return {
-        posts: [...state.posts, 'html'],
+        ...state,
+        loading: true,
       };
-    case POSTS_FETCH_REQUEST:
+    case POSTS_FETCH_SUCCESS:
       return {
-        posts: [...state.posts],
+        ...state,
+        posts: action.payload,
+        loading: false,
       };
     case POSTS_FETCH_FAIL:
       return {
-        posts: [...state.posts],
+        ...state,
+        error: action.payload,
+        loading: false,
       };
     default:
       return state;
@@ -91,4 +96,4 @@ store.subscribe(() => {
 });
 
 // dispatch
-store.dispatch(postsFetchRequest());
+store.dispatch(fetchPosts());
