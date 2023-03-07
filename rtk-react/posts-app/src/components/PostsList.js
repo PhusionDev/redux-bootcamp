@@ -12,15 +12,26 @@ const PostsList = () => {
     dispatch(fetchPosts());
   }, [dispatch]);
 
+  // get data from store
+  const { posts, loading, error } = useSelector((state) => state);
+
   return (
     <>
       <SearchPost />
       <div className='posts-list'>
-        <h1>Total Posts 100</h1>
-        <div className='post-details'>
-          <h3>Post Title 1</h3>
-          <p>Post body 1</p>
-        </div>
+        <h1>Total Posts {posts.length}</h1>
+        {loading ? (
+          <h2>Loading...</h2>
+        ) : error ? (
+          <h2 style={{ color: 'red' }}>{error}</h2>
+        ) : (
+          posts.map((post) => (
+            <div className='post-details' key={post.id}>
+              <h3>{post.title}</h3>
+              <p>{post.content}</p>
+            </div>
+          ))
+        )}
       </div>
     </>
   );

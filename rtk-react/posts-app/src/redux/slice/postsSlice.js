@@ -6,7 +6,7 @@ import apiUrl from '../../utils/apiUrl';
 // initial state
 const initialState = {
   posts: [],
-  loading: false,
+  loading: true,
   error: '',
 };
 
