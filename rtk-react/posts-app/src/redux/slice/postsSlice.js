@@ -11,7 +11,7 @@ const initialState = {
 };
 
 // actions
-const fetchPosts = createAsyncThunk('posts/fetch', async () => {
+export const fetchPosts = createAsyncThunk('posts/fetch', async () => {
   const res = await axios.get(apiUrl);
 
   return res.data;
