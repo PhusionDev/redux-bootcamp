@@ -1,15 +1,22 @@
-import React from "react";
-import "./Form.css";
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import './Form.css';
+
+import { fetchPost } from '../redux/slice/postsSlice';
+
 const SearchPost = () => {
+  const dispatch = useDispatch();
+
   //search form state
-  const [search, setSearch] = React.useState("");
+  const [search, setSearch] = React.useState('');
   //search form submit handler
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
+    dispatch(fetchPost(search));
   };
 
   return (
-    <div className="form-header">
+    <div className='form-header'>
       <div>
         <h2>React Redux Project</h2>
         <p>
@@ -19,12 +26,12 @@ const SearchPost = () => {
       </div>
       <form onSubmit={handleSubmit}>
         <input
-          placeholder="Search for a post"
-          type="text"
+          placeholder='Search for a post'
+          type='text'
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
         />
-        <button type="submit">Search</button>
+        <button type='submit'>Search</button>
       </form>
     </div>
   );

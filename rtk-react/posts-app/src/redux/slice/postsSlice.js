@@ -11,11 +11,33 @@ const initialState = {
 };
 
 // actions
-export const fetchPosts = createAsyncThunk('posts/fetch', async () => {
-  const res = await axios.get(apiUrl);
+// fetch all posts
+export const fetchPosts = createAsyncThunk(
+  'posts/fetch',
+  async (payload, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const res = await axios.get(apiUrl);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.status);
+    }
+  }
+);
 
-  return res.data;
-});
+// fetch a single post
+export const fetchPost = createAsyncThunk(
+  'posta/search',
+  async (id, { rejectWithValue, getState, dispatch }) => {
+    try {
+      const res = await axios.get(`${apiUrl}/${id}`);
+      return res.data;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.status);
+    }
+  }
+);
 
 // slice
 const postsSlice = createSlice({
@@ -37,6 +59,20 @@ const postsSlice = createSlice({
 
     // rejected
     builder.addCase(fetchPosts.rejected, (state, action) => {
+      state.loading = false;
+      state.posts = [];
+      state.error = action.payload;
+    });
+
+    // search single post
+    builder.addCase(fetchPost.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchPost.fulfilled, (state, action) => {
+      state.loading = false;
+      state.posts = [action.payload];
+    });
+    builder.addCase(fetchPost.rejected, (state, action) => {
       state.loading = false;
       state.posts = [];
       state.error = action.payload;
