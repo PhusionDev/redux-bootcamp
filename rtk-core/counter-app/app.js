@@ -1,4 +1,9 @@
-const { createAction, nanoid, createReducer } = require('@reduxjs/toolkit');
+const {
+  createAction,
+  nanoid,
+  createReducer,
+  configureStore,
+} = require('@reduxjs/toolkit');
 
 // initial state
 const initialState = {
@@ -8,15 +13,13 @@ const initialState = {
 // action creators
 const increment = createAction('INCREMENT');
 const decrement = createAction('DECREMENT');
-const resetCounter = createAction('RESET');
+const reset = createAction('RESET');
 
 // customize createAction
-const incrementBy = createAction('INCREMENT_BY', (amount, user) => {
+const incrementBy = createAction('INCREMENT_BY', (amount) => {
   return {
     payload: {
       amount,
-      user,
-      id: nanoid(),
     },
   };
 });
@@ -62,4 +65,15 @@ const counterSlice2 = createAction(initialState, {
     state.count += action.payload.amount;
   },
 });
+
 // store
+const store = configureStore({
+  reducer: counterSlice,
+});
+
+// dispatch action
+store.dispatch(increment());
+store.dispatch(incrementBy(20));
+store.dispatch(decrement());
+
+console.log(store.getState());
