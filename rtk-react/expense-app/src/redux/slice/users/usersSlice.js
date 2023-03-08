@@ -29,6 +29,7 @@ export const registerUserAction = createAsyncThunk(
           'Content-Type': 'application/json',
         },
       };
+      console.log(payload);
       const user = {
         fullname: payload.fullname,
         email: payload.email,
