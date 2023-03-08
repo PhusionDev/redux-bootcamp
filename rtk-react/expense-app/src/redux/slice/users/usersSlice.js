@@ -19,7 +19,7 @@ const initialState = {
 
 // action creator
 // register
-const registerUserAction = createAsyncThunk(
+export const registerUserAction = createAsyncThunk(
   'user/register',
   async (payload, { rejectWithValue, getState, dispatch }) => {
     try {
@@ -42,3 +42,27 @@ const registerUserAction = createAsyncThunk(
     }
   }
 );
+
+// users slice
+const usersSlice = createSlice({
+  name: 'users',
+  initialState,
+  extraReducers: (builder) => {
+    builder.addCase(registerUserAction.pending, (state, action) => {
+      state.loading = true;
+    });
+    builder.addCase(registerUserAction.fulfilled, (state, action) => {
+      state.loading = false;
+      state.userAuth.userInfo = action.payload;
+    });
+    builder.addCase(registerUserAction.rejected, (state, action) => {
+      state.loading = false;
+      state.userAuth.error = action.payload;
+    });
+  },
+});
+
+// generate reducer
+const usersReducer = usersSlice.reducer;
+
+export default usersReducer;
